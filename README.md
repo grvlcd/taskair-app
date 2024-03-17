@@ -7,9 +7,9 @@ First, installation and setup env then run the development server:
 1. npm install
 2. create .env.local
 3. copy and paste
-   CLIENT_ID=<CLIENT_ID_FROM_LARAVEL>
-   REDIRECT_URI=<http://localhost:3000/sso/callback>
-   BACKEND_URL=<http://localhost:8000>
+- CLIENT_ID=<CLIENT_ID_FROM_LARAVEL>
+- REDIRECT_URI=http://localhost:3000/sso/callback
+- BACKEND_URL=<http://localhost:8000>
 
 ```bash
 npm run dev

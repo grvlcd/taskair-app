@@ -17,7 +17,7 @@ export default async function handler(
     res,
   });
 
-  await fetch(process.env.BACKEND_URL + "/logout", {
+  await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + "/logout", {
     method: "POST",
     headers: {
       Accept: "application/json",

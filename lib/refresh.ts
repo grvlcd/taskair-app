@@ -28,14 +28,14 @@ export const fetchOrRefresh = async({token, fetcher, server}: Args) => {
     const data = await fetcher(token.access_token!);
 
     if(data.status === 401) {
-        const refreshTokenRequest = await fetch(process.env.BACKEND_URL + '/oauth/token', {
+        const refreshTokenRequest = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/oauth/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             },
             body: JSON.stringify({
-                client_id: process.env.CLIENT_ID,
+                client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
                 refresh_token: token.refresh_token!,
                 grant_type: 'refresh_token'
             })

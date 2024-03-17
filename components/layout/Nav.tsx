@@ -1,18 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { NextPage } from "next";
 
 type Props = {
-  ssoUrl?: string;
   authenticated: boolean;
   onLogout?: () => void;
 };
 
-const Navbar: NextPage<Props> = ({
-  ssoUrl,
-  authenticated,
-  onLogout,
-}: Props) => {
+const ssoUrl =
+  `${process.env.NEXT_PUBLIC_BACKEND_URL}/redirect?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}` as const;
+
+const Navbar: NextPage<Props> = ({ authenticated, onLogout }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -30,7 +28,7 @@ const Navbar: NextPage<Props> = ({
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <a
+                {/* <a
                   href="#"
                   className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
@@ -49,28 +47,11 @@ const Navbar: NextPage<Props> = ({
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Projects
-                </a>
-
-                {authenticated ? (
-                  <button
-                    type="button"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                    onClick={onLogout}
-                  >
-                    Logout
-                  </button>
-                ) : (
-                  <a
-                    href={ssoUrl}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Login
-                  </a>
-                )}
+                </a> */}
               </div>
             </div>
           </div>
-          <div className="-mr-2 flex md:hidden">
+          <div className="-mr-2 md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
@@ -114,6 +95,24 @@ const Navbar: NextPage<Props> = ({
               )}
             </button>
           </div>
+          <div className="-mr-2 hidden md:block">
+            {authenticated ? (
+              <button
+                type="button"
+                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                onClick={onLogout}
+              >
+                Logout
+              </button>
+            ) : (
+              <a
+                href={ssoUrl}
+                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Login
+              </a>
+            )}
+          </div>
         </div>
       </div>
 
@@ -149,12 +148,22 @@ const Navbar: NextPage<Props> = ({
               Projects
             </a>
 
-            <a
-              href={ssoUrl}
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Login
-            </a>
+            {authenticated ? (
+              <button
+                type="button"
+                className="text-gray-300 bg-red-800 hover:bg-red-400 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full"
+                onClick={onLogout}
+              >
+                Logout
+              </button>
+            ) : (
+              <a
+                href={ssoUrl}
+                className="text-gray-300 bg-blue-800 hover:bg-blue-400 hover:text-white block px-3 py-2 rounded-md text-base font-medium text-center"
+              >
+                Login
+              </a>
+            )}
           </div>
         </div>
       </Transition>
