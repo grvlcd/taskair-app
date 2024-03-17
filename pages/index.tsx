@@ -15,13 +15,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     fetcher: async (access_token) => {
       if (!access_token) return { status: 401, user: [] };
 
-      const getUserRequest = await fetch(process.env.BACKEND_URL + "/users", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
+      const getUserRequest = await fetch(
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/users",
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
 
       const getUserResponse = await getUserRequest.json();
 
@@ -70,9 +73,7 @@ const Home: NextPage<Props> = ({ user, access_token }: Props) => {
       body: JSON.stringify({ access_token }),
     });
 
-    router.replace("/auth/login").then(() => {
-      window.location.reload();
-    });
+    router.replace("/auth/login");
   };
 
   return (

@@ -19,11 +19,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const ssoURL = `${process.env.BACKEND_URL}/redirect?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}`;
 const Login: NextPage = () => {
   return (
     <div>
-      <Navbar ssoUrl={ssoURL} authenticated={false} />
+      <Navbar authenticated={false} />
     </div>
   );
 };

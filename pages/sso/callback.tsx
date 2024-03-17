@@ -9,13 +9,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (query.code && query.state) {
     // @ts-ignore
     const params = new URLSearchParams({
-      client_id: process.env.CLIENT_ID,
-      redirect_uri: process.env.REDIRECT_URI,
+      client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
       code: query.code,
       state: query.state,
     });
 
-    const url = `${process.env.BACKEND_URL}/callback?${params.toString()}`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/callback?${params.toString()}`;
 
     return {
       redirect: {
