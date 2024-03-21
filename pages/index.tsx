@@ -1,9 +1,12 @@
+"use client";
 import Navbar from "@/components/layout/Nav";
 import { fetchOrRefresh } from "@/lib/refresh";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { MouseEventHandler } from "react";
 import { isEmpty } from "lodash";
+import SideNav from "@/components/layout/SideNav";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { access_token, refresh_token } = context.req.cookies;
@@ -77,9 +80,11 @@ const Home: NextPage<Props> = ({ user, access_token }: Props) => {
   };
 
   return (
-    <>
-      {/* @ts-ignore */}
-      <Navbar authenticated={isUserAuthenticated} onLogout={onLogoutHandler} />
+    <DashboardLayout
+      isAuthenticated={isUserAuthenticated}
+      /* @ts-ignore */
+      onLogout={onLogoutHandler}
+    >
       <div className="p-4 space-y-4">
         <h1 className="text-lg font-bold">You&apos;re logged in.</h1>
         <div className="text-lg">
@@ -87,7 +92,7 @@ const Home: NextPage<Props> = ({ user, access_token }: Props) => {
           <p>Email: {user.email} </p>
         </div>
       </div>
-    </>
+    </DashboardLayout>
   );
 };
 
