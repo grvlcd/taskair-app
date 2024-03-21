@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { NextPage } from "next";
 
