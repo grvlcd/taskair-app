@@ -1,18 +1,29 @@
 import React, { useRef, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 
 type Props = {
   authenticated: boolean;
-  onLogout?: () => void;
 };
 
 const ssoUrl =
   `${process.env.NEXT_PUBLIC_BACKEND_URL}/redirect?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}` as const;
 
-const Navbar: NextPage<Props> = ({ authenticated, onLogout }: Props) => {
+const Navbar: NextPage<Props> = ({ authenticated }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const access_token =
+    typeof window !== "undefined" && JSON.parse(localStorage.getItem("token")!);
+
+  const onLogoutHandler = async () => {
+    await fetch("/api/logout", {
+      method: "POST",
+      body: JSON.stringify({ access_token }),
+    });
+    router.replace("/auth/login");
+  };
 
   return (
     <nav className="bg-gray-800">
@@ -100,7 +111,7 @@ const Navbar: NextPage<Props> = ({ authenticated, onLogout }: Props) => {
               <button
                 type="button"
                 className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                onClick={onLogout}
+                onClick={onLogoutHandler}
               >
                 Logout
               </button>
@@ -152,7 +163,7 @@ const Navbar: NextPage<Props> = ({ authenticated, onLogout }: Props) => {
               <button
                 type="button"
                 className="text-gray-300 bg-red-800 hover:bg-red-400 hover:text-white block px-3 py-2 rounded-md text-base font-medium w-full"
-                onClick={onLogout}
+                onClick={onLogoutHandler}
               >
                 Logout
               </button>

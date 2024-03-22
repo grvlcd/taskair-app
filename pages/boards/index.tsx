@@ -1,8 +1,11 @@
 "use client";
+import Navbar from "@/components/layout/Nav";
 import { fetchOrRefresh } from "@/lib/refresh";
 import { GetServerSideProps, NextPage } from "next";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { MouseEventHandler } from "react";
 import { isEmpty } from "lodash";
+import SideNav from "@/components/layout/SideNav";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
 type Props = {
@@ -10,10 +13,10 @@ type Props = {
   access_token: string;
 };
 
-const Home: NextPage<Props> = ({ user, access_token }: Props) => {
+const BoardsPage: NextPage<Props> = ({ user, access_token }: Props) => {
+  const router = useRouter();
+
   const isUserAuthenticated = !isEmpty(user);
-  typeof window !== "undefined" &&
-    localStorage.setItem("token", JSON.stringify(access_token));
 
   return (
     <DashboardLayout isAuthenticated={isUserAuthenticated}>
@@ -78,4 +81,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Home;
+export default BoardsPage;
