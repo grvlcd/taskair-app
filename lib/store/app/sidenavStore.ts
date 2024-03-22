@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
-type Store = {
+type AppStore = {
   isOpen: boolean;
   toggleSideNav: () => void;
 };
 
-const useSidenavStore = create<Store>((set) => ({
+const useSidenavStore = create<AppStore>((set) => ({
   isOpen: false,
   toggleSideNav: () =>
     set((state) => ({
