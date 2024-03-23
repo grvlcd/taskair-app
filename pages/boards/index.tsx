@@ -1,69 +1,49 @@
 "use client";
-import Navbar from "@/components/layout/Nav";
-import { fetchOrRefresh } from "@/lib/refresh";
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import { isEmpty } from "lodash";
-import SideNav from "@/components/layout/SideNav";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { getUserData } from "@/lib/fetchUser";
+import { TUser } from "@/lib/models/user/TUser";
+import useBoardStore from "@/lib/store/boards/boardStore";
+import BoardModal from "@/components/boards/modals/boardModal";
 
-type Props = {
-  user: any;
-  access_token: string;
+type BoardProps = {
+  user: TUser;
 };
 
-const BoardsPage: NextPage<Props> = ({ user, access_token }: Props) => {
+const BoardsPage: NextPage<BoardProps> = ({ user }: BoardProps) => {
   const router = useRouter();
-
+  const { toggle } = useBoardStore();
   const isUserAuthenticated = !isEmpty(user);
 
   return (
     <DashboardLayout isAuthenticated={isUserAuthenticated}>
       <div className="p-4 space-y-4">
+        <button
+          type="button"
+          onClick={() => {
+            toggle(true);
+          }}
+          className="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+        >
+          Create Board
+        </button>
         <h1 className="text-lg font-bold">You&apos;re logged in.</h1>
         <div className="text-lg">
           <p>Name: {user.name}</p>
           <p>Email: {user.email} </p>
         </div>
       </div>
+      <BoardModal />
     </DashboardLayout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { access_token, refresh_token } = context.req.cookies;
-  const user = await fetchOrRefresh({
-    token: {
-      access_token,
-      refresh_token,
-    },
-    fetcher: async (access_token) => {
-      if (!access_token) return { status: 401, user: [] };
-
-      const getUserRequest = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/users",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-
-      const getUserResponse = await getUserRequest.json();
-
-      return {
-        status: getUserRequest.status,
-        ...getUserResponse,
-      };
-    },
-    server: {
-      req: context.req,
-      res: context.res,
-    },
-  });
+  const { access_token } = context.req.cookies;
+  const user = await getUserData({ context });
 
   if (!user || !access_token)
     return {
