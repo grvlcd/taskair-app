@@ -1,19 +1,19 @@
 "use client";
-import { fetchOrRefresh } from "@/lib/refresh";
 import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { isEmpty } from "lodash";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { getUserData } from "@/lib/fetchUser";
+import { TUser } from "@/lib/models/user/TUser";
 
-type Props = {
-  user: any;
-  access_token: string;
+type HomeProps = {
+  user: TUser;
 };
 
-const Home: NextPage<Props> = ({ user, access_token }: Props) => {
+const Home: NextPage<HomeProps> = ({ user }: HomeProps) => {
   const isUserAuthenticated = !isEmpty(user);
   typeof window !== "undefined" &&
-    localStorage.setItem("token", JSON.stringify(access_token));
+    localStorage.setItem("token", JSON.stringify(user.access_token));
 
   return (
     <DashboardLayout isAuthenticated={isUserAuthenticated}>
@@ -29,38 +29,8 @@ const Home: NextPage<Props> = ({ user, access_token }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { access_token, refresh_token } = context.req.cookies;
-  const user = await fetchOrRefresh({
-    token: {
-      access_token,
-      refresh_token,
-    },
-    fetcher: async (access_token) => {
-      if (!access_token) return { status: 401, user: [] };
-
-      const getUserRequest = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/users",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-
-      const getUserResponse = await getUserRequest.json();
-
-      return {
-        status: getUserRequest.status,
-        ...getUserResponse,
-      };
-    },
-    server: {
-      req: context.req,
-      res: context.res,
-    },
-  });
+  const { access_token } = context.req.cookies;
+  const user = await getUserData({ context });
 
   if (!user || !access_token)
     return {

@@ -11,13 +11,12 @@ type DashboardProps = {
 
 const DashboardLayout: NextPage<DashboardProps> = ({
   isAuthenticated,
-  onLogout,
   children,
 }) => {
   return (
     <main>
       <div className="flex flex-col h-screen">
-        <Navbar authenticated={isAuthenticated} onLogout={onLogout} />
+        <Navbar authenticated={isAuthenticated} />
         <div className="flex flex-row h-screen">
           <SideNav />
           {children}
