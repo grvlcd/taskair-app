@@ -1,6 +1,5 @@
 "use client";
 import { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
 import React from "react";
 import { isEmpty } from "lodash";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -14,7 +13,6 @@ type BoardProps = {
 };
 
 const BoardsPage: NextPage<BoardProps> = ({ user }: BoardProps) => {
-  const router = useRouter();
   const { toggle } = useBoardStore();
   const isUserAuthenticated = !isEmpty(user);
 
@@ -28,7 +26,7 @@ const BoardsPage: NextPage<BoardProps> = ({ user }: BoardProps) => {
           }}
           className="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
         >
-          Create Board
+          <p>Create Board</p>
         </button>
         <h1 className="text-lg font-bold">You&apos;re logged in.</h1>
         <div className="text-lg">
