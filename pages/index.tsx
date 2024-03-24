@@ -14,10 +14,10 @@ type HomeProps = {
 const Home: NextPage<HomeProps> = ({ user }: HomeProps) => {
   const navigate = useRouter();
   const isUserAuthenticated = !isEmpty(user);
-    
+
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("token", JSON.stringify(user.access_token));
+      localStorage.setItem("token", user.access_token);
       const token = localStorage.getItem("token");
       if (typeof token === "undefined") {
         navigate.push("/auth/login");
@@ -27,13 +27,7 @@ const Home: NextPage<HomeProps> = ({ user }: HomeProps) => {
 
   return (
     <DashboardLayout isAuthenticated={isUserAuthenticated}>
-      <div className="p-4 space-y-4">
-        <h1 className="text-lg font-bold">You&apos;re logged in.</h1>
-        <div className="text-lg">
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email} </p>
-        </div>
-      </div>
+      <div className="p-4 space-y-4"></div>
     </DashboardLayout>
   );
 };

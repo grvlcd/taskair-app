@@ -1,20 +1,25 @@
 "use client";
 import { GetServerSideProps, NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import { isEmpty } from "lodash";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { getUserData } from "@/lib/fetchUser";
 import { TUser } from "@/lib/models/user/TUser";
-import useBoardStore from "@/lib/store/boards/boardStore";
+import useBoardStore, { TBoard } from "@/lib/store/boards/boardStore";
 import BoardModal from "@/components/boards/modals/boardModal";
+import BoardCard from "@/components/boards/card";
 
 type BoardProps = {
   user: TUser;
 };
 
 const BoardsPage: NextPage<BoardProps> = ({ user }: BoardProps) => {
-  const { toggle } = useBoardStore();
+  const { data, isLoading, getBoards, toggle } = useBoardStore();
   const isUserAuthenticated = !isEmpty(user);
+
+  useEffect(() => {
+    getBoards();
+  }, []);
 
   return (
     <DashboardLayout isAuthenticated={isUserAuthenticated}>
@@ -28,10 +33,15 @@ const BoardsPage: NextPage<BoardProps> = ({ user }: BoardProps) => {
         >
           <p>Create Board</p>
         </button>
-        <h1 className="text-lg font-bold">You&apos;re logged in.</h1>
-        <div className="text-lg">
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email} </p>
+        <div className="flex flex-row space-x-5">
+          {!isEmpty(data) &&
+            data.shared.map((board: TBoard) => (
+              <BoardCard
+                key={board.id}
+                title={board.name}
+                description={board.description}
+              />
+            ))}
         </div>
       </div>
       <BoardModal />
