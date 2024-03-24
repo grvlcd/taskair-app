@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -11,11 +11,23 @@ const ssoUrl =
   `${process.env.NEXT_PUBLIC_BACKEND_URL}/redirect?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}` as const;
 
 const Navbar: NextPage<Props> = ({ authenticated }: Props) => {
+  const navigate = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [access_token, setAccessToken] = useState("");
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const access_token =
-    typeof window !== "undefined" && JSON.parse(localStorage.getItem("token")!);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token")!;
+      if (typeof token === "undefined") {
+        navigate.push("/auth/login");
+        return;
+      } else {
+        setAccessToken(token);
+      }
+    }
+  }, []);
 
   const onLogoutHandler = async () => {
     await fetch("/api/logout", {
