@@ -1,19 +1,29 @@
 "use client";
 import { GetServerSideProps, NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import { isEmpty } from "lodash";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { getUserData } from "@/lib/fetchUser";
 import { TUser } from "@/lib/models/user/TUser";
+import { useRouter } from "next/router";
 
 type HomeProps = {
   user: TUser;
 };
 
 const Home: NextPage<HomeProps> = ({ user }: HomeProps) => {
+  const navigate = useRouter();
   const isUserAuthenticated = !isEmpty(user);
-  typeof window !== "undefined" &&
-    localStorage.setItem("token", JSON.stringify(user.access_token));
+    
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("token", JSON.stringify(user.access_token));
+      const token = localStorage.getItem("token");
+      if (typeof token === "undefined") {
+        navigate.push("/auth/login");
+      }
+    }
+  }, []);
 
   return (
     <DashboardLayout isAuthenticated={isUserAuthenticated}>
