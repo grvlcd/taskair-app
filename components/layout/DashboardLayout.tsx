@@ -19,7 +19,7 @@ const DashboardLayout: NextPage<DashboardProps> = ({
         <Navbar authenticated={isAuthenticated} />
         <div className="flex flex-row h-screen">
           <SideNav />
-          {children}
+          <div className="p-4 space-y-4">{children}</div>
         </div>
       </div>
     </main>

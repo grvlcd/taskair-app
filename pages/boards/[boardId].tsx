@@ -1,33 +1,21 @@
 "use client";
 import { GetServerSideProps, NextPage } from "next";
-import React, { useEffect } from "react";
-import { isEmpty } from "lodash";
-import DashboardLayout from "@/components/layout/DashboardLayout";
+import React from "react";
+
 import { getUserData } from "@/lib/fetchUser";
 import { TUser } from "@/lib/models/user/TUser";
-import { useRouter } from "next/router";
+import { isEmpty } from "lodash";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 
-type HomeProps = {
+type BoardProps = {
   user: TUser;
 };
 
-const Home: NextPage<HomeProps> = ({ user }: HomeProps) => {
-  const navigate = useRouter();
+const BoardPage: NextPage<BoardProps> = ({ user }: BoardProps) => {
   const isUserAuthenticated = !isEmpty(user);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("token", user.access_token);
-      const token = localStorage.getItem("token");
-      if (typeof token === "undefined") {
-        navigate.push("/auth/login");
-      }
-    }
-  }, []);
-
   return (
     <DashboardLayout isAuthenticated={isUserAuthenticated}>
-      <h1>Dashboard</h1>
+      <h1>This is where we display the boards {user.name}</h1>
     </DashboardLayout>
   );
 };
@@ -52,4 +40,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Home;
+export default BoardPage;
