@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { TBoardTask } from './boardTypes';
+import { TBoardTask } from '@/lib/models/board/task';
+import useTaskStore from '@/lib/store/task/taskStore';
 
 type TBoardTaskProps = {
 	task: TBoardTask;
@@ -14,10 +15,16 @@ const BoardTaskCard = ({ task }: TBoardTaskProps) => {
 			task
 		}
 	});
+	const { toggle, setForm } = useTaskStore();
 
 	const style = {
 		transition,
 		transform: CSS.Transform.toString(transform)
+	};
+
+	const handleViewTask = () => {
+		setForm(task);
+		toggle(true);
 	};
 
 	if (isDragging) {
@@ -25,7 +32,7 @@ const BoardTaskCard = ({ task }: TBoardTaskProps) => {
 			<div
 				ref={setNodeRef}
 				style={style}
-				className="opacity-30 bg-gray-700 p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl border-2 border-rose-500  cursor-grab relative"
+				className="opacity-40 bg-white p-2.5 h-[160px] min-h-[160px] items-center flex rounded-md border-2 border-indigo-700  cursor-grab relative"
 			/>
 		);
 	}
@@ -36,8 +43,9 @@ const BoardTaskCard = ({ task }: TBoardTaskProps) => {
 			style={style}
 			{...attributes}
 			{...listeners}
-			className="bg-gray-700 p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab relative task">
-			<p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+			className="bg-white shadow-sm p-2.5 h-[160px] min-h-[160px] items-center flex text-left rounded-md hover:ring-2 hover:ring-inset hover:ring-indigo-700 cursor-grab relative task"
+			onClick={handleViewTask}>
+			<p className="my-auto h-[90%] w-full overflow-y-hidden overflow-x-hidden whitespace-pre-wrap">
 				{task.content}
 			</p>
 		</div>

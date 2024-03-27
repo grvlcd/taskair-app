@@ -12,7 +12,8 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import ColumnContainer from './boardColumn';
-import { TBoardColumn, TBoardTask } from './boardTypes';
+import { TBoardColumn } from '@/lib/models/board/board';
+import { TBoardTask } from '@/lib/models/board/task';
 import TaskCard from './taskCard';
 
 const defaultCols: TBoardColumn[] = [
@@ -22,7 +23,7 @@ const defaultCols: TBoardColumn[] = [
 	},
 	{
 		id: 'inProgress',
-		title: 'In progress'
+		title: 'In Progress'
 	},
 	{
 		id: 'review',
@@ -31,6 +32,14 @@ const defaultCols: TBoardColumn[] = [
 	{
 		id: 'testing',
 		title: 'Testing'
+	},
+	{
+		id: 'staging',
+		title: 'Staging'
+	},
+	{
+		id: 'production',
+		title: 'Production'
 	},
 	{
 		id: 'done',
@@ -42,68 +51,67 @@ const defaultTasks: TBoardTask[] = [
 	{
 		id: '1',
 		columnId: 'todo',
-		content: 'List admin APIs for dashboard'
+		content: 'Test 1'
 	},
 	{
 		id: '2',
 		columnId: 'todo',
-		content:
-			'Develop user registration functionality with OTP delivered on SMS after email confirmation and phone number confirmation'
+		content: 'Test 2'
 	},
 	{
 		id: '3',
 		columnId: 'doing',
-		content: 'Conduct security testing'
+		content: 'Test 3'
 	},
 	{
 		id: '4',
 		columnId: 'doing',
-		content: 'Analyze competitors'
+		content: 'Test 4'
 	},
 	{
 		id: '5',
 		columnId: 'done',
-		content: 'Create UI kit documentation'
+		content: 'Test 5'
 	},
 	{
 		id: '6',
 		columnId: 'done',
-		content: 'Dev meeting'
+		content: 'Test 6'
 	},
 	{
 		id: '7',
 		columnId: 'done',
-		content: 'Deliver dashboard prototype'
+		content: 'Test 7'
 	},
 	{
 		id: '8',
 		columnId: 'todo',
-		content: 'Optimize application performance'
+		content: 'Test 8'
 	},
 	{
 		id: '9',
 		columnId: 'todo',
-		content: 'Implement data validation'
+		content: 'Test 9'
 	},
 	{
 		id: '10',
 		columnId: 'todo',
-		content: 'Design database schema'
+		content: 'Test 10'
 	},
 	{
 		id: '11',
 		columnId: 'todo',
-		content: 'Integrate SSL web certificates into workflow'
+		content: 'Test 11'
 	},
 	{
 		id: '12',
 		columnId: 'doing',
-		content: 'Implement error logging and monitoring'
+		content: 'Test 12'
 	},
 	{
 		id: '13',
 		columnId: 'doing',
-		content: 'Design and implement responsive UI'
+		content: 'Test 13'
 	}
 ];
 
@@ -167,17 +175,16 @@ const Board = () => {
 				const activeIndex = tasks.findIndex(t => t.id === activeId);
 
 				tasks[activeIndex].columnId = overId;
-				console.log('DROPPING TASK OVER COLUMN', { activeIndex });
 				return arrayMove(tasks, activeIndex, activeIndex);
 			});
 		}
 	};
 
 	return (
-		<div className="m-auto flex w-full items-center overflow-x-auto overflow-y-hidden px-[40px]">
+		<div className="m-0 p-0 flex w-full items-center overflow-x-auto overflow-y-hidden">
 			<DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragOver={onDragOver}>
-				<div className="m-auto flex gap-4">
-					<div className="flex gap-4">
+				<div className="m-auto flex gap-4 overflow-y-hidden overflow-x-auto">
+					<div className="flex overflow-x-auto scroll-smooth gap-4">
 						{columns.map(col => (
 							<ColumnContainer
 								key={col.id}
