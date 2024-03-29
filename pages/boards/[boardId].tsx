@@ -7,6 +7,7 @@ import { getUserData } from '@/lib/fetchUser';
 import { TUser } from '@/lib/models/user/TUser';
 import { isEmpty } from 'lodash';
 import TaskModal from '@/components/boards/modals/taskModal';
+import CreateTaskModal from '@/components/boards/modals/createTaskModal';
 
 type BoardProps = {
 	user: TUser;
@@ -17,6 +18,7 @@ const BoardPage: NextPage<BoardProps> = ({ user }: BoardProps) => {
 	return (
 		<DashboardLayout isAuthenticated={isUserAuthenticated}>
 			<Board />
+			<CreateTaskModal />
 			<TaskModal />
 		</DashboardLayout>
 	);

@@ -9,40 +9,42 @@ import {
 	useSensors
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import ColumnContainer from './boardColumn';
 import { TBoardColumn } from '@/lib/models/board/board';
 import { TBoardTask } from '@/lib/models/board/task';
 import TaskCard from './taskCard';
+import useTaskStore from '@/lib/store/task/taskStore';
+import { groupBy, isEmpty } from 'lodash';
 
 const defaultCols: TBoardColumn[] = [
 	{
-		id: 'todo',
+		id: 'TODO',
 		title: 'Todo'
 	},
 	{
-		id: 'inProgress',
+		id: 'IN_PROGRESS',
 		title: 'In Progress'
 	},
 	{
-		id: 'review',
+		id: 'REVIEW',
 		title: 'Technical Review'
 	},
 	{
-		id: 'testing',
+		id: 'TESTING',
 		title: 'Testing'
 	},
 	{
-		id: 'staging',
+		id: 'STAGING',
 		title: 'Staging'
 	},
 	{
-		id: 'production',
+		id: 'PRODUCTION',
 		title: 'Production'
 	},
 	{
-		id: 'done',
+		id: 'DONE',
 		title: 'Done'
 	}
 ];
@@ -50,68 +52,73 @@ const defaultCols: TBoardColumn[] = [
 const defaultTasks: TBoardTask[] = [
 	{
 		id: '1',
-		columnId: 'todo',
+		columnId: 'TODO',
 		content: 'Test 1'
 	},
 	{
 		id: '2',
-		columnId: 'todo',
+		columnId: 'TODO',
 		content: 'Test 2'
 	},
 	{
 		id: '3',
-		columnId: 'doing',
+		columnId: 'IN_PROGRESS',
 		content: 'Test 3'
 	},
 	{
 		id: '4',
-		columnId: 'doing',
+		columnId: 'IN_PROGRESS',
 		content: 'Test 4'
 	},
 	{
 		id: '5',
-		columnId: 'done',
+		columnId: 'DONE',
 		content: 'Test 5'
 	},
 	{
 		id: '6',
-		columnId: 'done',
+		columnId: 'DONE',
 		content: 'Test 6'
 	},
 	{
 		id: '7',
-		columnId: 'done',
+		columnId: 'DONE',
 		content: 'Test 7'
 	},
 	{
 		id: '8',
-		columnId: 'todo',
+		columnId: 'TODO',
 		content: 'Test 8'
 	},
 	{
 		id: '9',
-		columnId: 'todo',
+		columnId: 'TODO',
 		content: 'Test 9'
 	},
 	{
 		id: '10',
-		columnId: 'todo',
+		columnId: 'TODO',
 		content: 'Test 10'
 	},
 	{
 		id: '11',
-		columnId: 'todo',
+		columnId: 'TODO',
 		content: 'Test 11'
 	},
 	{
 		id: '12',
-		columnId: 'doing',
+		columnId: 'IN_PROGRESS',
 		content: 'Test 12'
 	},
 	{
 		id: '13',
-		columnId: 'doing',
+		columnId: 'IN_PROGRESS',
 		content: 'Test 13'
+	},
+	{
+		id: '14',
+		columnId: 'REVIEW',
+		content: 'Test 14'
 	}
 ];
 
