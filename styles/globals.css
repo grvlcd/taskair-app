@@ -41,5 +41,5 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-indigo-700 rounded-xl;
+  @apply bg-gray-900 rounded-xl;
 }

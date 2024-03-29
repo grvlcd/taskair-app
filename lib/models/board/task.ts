@@ -1,7 +1,7 @@
 import { TBoardId } from './board';
 
 export type TBoardTask = {
-	id: TBoardId;
+	id: string;
 	columnId: TBoardId;
 	content: string;
 };

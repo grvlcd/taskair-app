@@ -11,7 +11,7 @@ type TBoardColumnProps = {
 
 const BoardColumn = ({ column, tasks }: TBoardColumnProps) => {
 	const tasksIds = useMemo(() => {
-		return tasks.map(task => task.id);
+		return tasks.map(task => task.id!);
 	}, [tasks]);
 
 	const { setNodeRef } = useSortable({
